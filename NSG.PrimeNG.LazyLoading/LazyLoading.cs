@@ -10,18 +10,47 @@ using System.ComponentModel;
 //
 namespace NSG.PrimeNG.LazyLoading
 {
+    /// <summary>
+    /// The <see cref="NSG.PrimeNG.LazyLoading"/> namespace contains a class
+    /// used by lazy loading feature and filter features.
+    /// The lazy loading feature allows one to return a page of data
+    /// and combined with the filtering and sorting features gives
+    /// a rich feature of transfering large set of data efficiently.
+    /// </summary>
+    [System.Runtime.CompilerServices.CompilerGenerated]
+    class NamespaceDoc
+    {
+    }
+    //
+    /// <summary>
+    /// Set of static helper methods,
+    /// meant to be used as extension methods.
+    /// </summary>
     public static partial class Helpers
     {
         //
         /// <summary>
-        /// 
-        ///     sortOrder 1=asc
-        ///              -1=desc
+        /// Sort this IQueryable, with:
+        ///  sortField and
+        ///  sortOrder 1=asc
+        ///           -1=desc
+        /// <example> 
+        /// This sample shows how to call this method, where _incidentQuery
+        /// is IQueryable of Incident:
+        /// <code>
+        ///   JavaScriptSerializer _jsSlzr = new JavaScriptSerializer();
+        ///   _loadEvent = (LazyLoadEvent) _jsSlzr.Deserialize( jsonString, typeof(LazyLoadEvent) );
+        ///   _incidentQuery = _incidentQuery.LazyOrderBy( _loadEvent );
+        /// </code>
+        /// </example>
+        /// <note type="note">
+        ///  'OrderBy' must be called before the method 'Skip'.
+        /// </note>
         /// </summary>
         /// <typeparam name="T">Some class (database)</typeparam>
         /// <param name="qry">IQueryable query of T</param>
-        /// <param name="lle">PrimeNG lazy loading event structure</param>
-        /// <returns>IQueryable query of T</returns>
+        /// <param name="lle">PrimeNG lazy loading event (LazyLoadEvent) structure</param>
+        /// <returns>IQueryable query of T (with sort applied)</returns>
         public static IQueryable<T> LazyOrderBy<T>(
                 this IQueryable<T> qry, LazyLoadEvent lle)
         {
@@ -40,12 +69,24 @@ namespace NSG.PrimeNG.LazyLoading
         }
         //
         /// <summary>
-        ///     skip forward in the database and take n # of rows
+        ///  Skip forward in the database and take n # of rows
+        /// <example> 
+        /// This sample shows how to call this method, where _incidentQuery
+        /// is IQueryable of Incident:
+        /// <code>
+        ///   JavaScriptSerializer _jsSlzr = new JavaScriptSerializer();
+        ///   _loadEvent = (LazyLoadEvent) _jsSlzr.Deserialize( jsonString, typeof(LazyLoadEvent) );
+        ///   _incidentQuery = _incidentQuery.LazySkipTake( _loadEvent );
+        /// </code>
+        /// </example>
+        /// <note type="note">
+        ///  'OrderBy' must be called before the method 'Skip'.
+        /// </note>
         /// </summary>
         /// <typeparam name="T">Some class (database)</typeparam>
         /// <param name="qry">IQueryable query of T</param>
-        /// <param name="lle">PrimeNG lazy loading event structure</param>
-        /// <returns>IQueryable query of T</returns>
+        /// <param name="lle">PrimeNG lazy loading event (LazyLoadEvent) structure</param>
+        /// <returns>IQueryable query of T (with skip/take applied)</returns>
         public static IQueryable<T> LazySkipTake<T>(
                 this IQueryable<T> qry, LazyLoadEvent lle)
         {
@@ -57,12 +98,24 @@ namespace NSG.PrimeNG.LazyLoading
         }
         //
         /// <summary>
-        /// Apply filter to an IQueryable from PrimeNG request.
+        ///  Apply filter to an IQueryable from PrimeNG request.
+        ///  Filter:
+        ///   key of the dictionary is the field name,
+        ///   object is value(s) and match mode
+        /// <example> 
+        /// This sample shows how to call this method, where _incidentQuery
+        /// is IQueryable of Incident:
+        /// <code>
+        ///   JavaScriptSerializer _jsSlzr = new JavaScriptSerializer();
+        ///   _loadEvent = (LazyLoadEvent) _jsSlzr.Deserialize( jsonString, typeof(LazyLoadEvent) );
+        ///   _incidentQuery = _incidentQuery.LazyFilters( _loadEvent );
+        /// </code>
+        /// </example>
         /// </summary>
         /// <typeparam name="T">Some class (database)</typeparam>
         /// <param name="qry">IQueryable query of T</param>
-        /// <param name="lle">PrimeNG lazy loading event structure</param>
-        /// <returns>IQueryable query of T</returns>
+        /// <param name="lle">PrimeNG lazy loading event (LazyLoadEvent) structure</param>
+        /// <returns>IQueryable query of T (with filters applied)</returns>
         public static IQueryable<T> LazyFilters<T>(
                 this IQueryable<T> qry, LazyLoadEvent lle)
         {
