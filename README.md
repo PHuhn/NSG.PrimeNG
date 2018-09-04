@@ -7,15 +7,15 @@ This solution contains .Net projects as follows:
 ### NSG.PrimeNG.LazyLoading
 NSG.PrimeNG.LazyLoading is a project of in support of TurboTable lazy and filter features.  This allows for remote pagination, filtering and sorting.
 Example from unit tests:
-    string _jsonString = "{\"first\":0,\"rows\":3," +
-                "\"sortOrder\":-1,\"sortField\":\"NoteTypeSortOrder\"," +
-                "\"filters\":{\"NoteTypeDesc\":{\"value\":\"SO\",\"matchMode\":\"StartsWith\"}}}";
-    JavaScriptSerializer _js_slzr = new JavaScriptSerializer();
-    LazyLoadEvent _loadEvent = (LazyLoadEvent)_js_slzr.Deserialize(_jsonString, typeof(LazyLoadEvent));
-    List<NoteType> _rows = NoteTypes.AsQueryable()
-                .LazyOrderBy(_loadEvent)
-                .LazyFilters(_loadEvent)
-                .LazySkipTake(_loadEvent).ToList();
+            string _jsonString = "{\"first\":0,\"rows\":3," +
+                         "\"sortOrder\":-1,\"sortField\":\"NoteTypeSortOrder\"," +
+                         "\"filters\":{\"NoteTypeDesc\":{\"value\":\"SO\",\"matchMode\":\"StartsWith\"}}}";
+            JavaScriptSerializer _js_slzr = new JavaScriptSerializer();
+            LazyLoadEvent _loadEvent = (LazyLoadEvent)_js_slzr.Deserialize(_jsonString, typeof(LazyLoadEvent));
+            List<NoteType> _rows = NoteTypes.AsQueryable()
+                        .LazyOrderBy(_loadEvent)
+                        .LazyFilters(_loadEvent)
+                        .LazySkipTake(_loadEvent).ToList();
 
 ### NSG.PrimeNG.LazyLoading_Tests
 NSG.PrimeNG.LazyLoading_Tests is a project of unit tests for the LazyLoading library.
