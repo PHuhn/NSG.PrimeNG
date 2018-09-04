@@ -8,7 +8,10 @@ Added packages:
 
 PROBLEM:
 ========
+ Test stopped showing up
 SOLUTION:
+ install-package MSTest.TestAdapter
+ Install-Package MSTest.TestFramework
 
 ======================================================================
 

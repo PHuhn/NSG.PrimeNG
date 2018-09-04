@@ -325,5 +325,29 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             Assert.AreEqual(_row7.NoteTypeSortOrder, 100);
         }
         //
+        [TestMethod(), TestCategory("EF_Native")]
+        public void LazyLoading_Lazy_All_01_Test()
+        {
+            // sortField: "NoteTypeSortOrder"
+            // string _pagination = "{\"sortOrder\":1,\"sortField\":\"NoteTypeSortOrder\",\"filters\":{\"ServerId\":{\"value\":1,\"matchMode\":\"equals\"},\"Mailed\":{\"value\":false,\"matchMode\":\"equals\"},\"Closed\":{\"value\":false,\"matchMode\":\"equals\"},\"Special\":{\"value\":false,\"matchMode\":\"equals\"}},\"globalFilter\":null}";
+            string _pagination = "{\"first\":0,\"rows\":3,\"sortOrder\":-1,\"sortField\":\"NoteTypeSortOrder\"," +
+                                "\"filters\":{\"NoteTypeDesc\":{\"value\":\"SO\",\"matchMode\":\"StartsWith\"}}}";
+            IQueryable<NoteType> noteTypeQueryable =
+                (from _r in NoteTypes select _r).AsQueryable();
+            JavaScriptSerializer _js_slzr = new JavaScriptSerializer();
+            LazyLoadEvent loadEvent = (LazyLoadEvent)_js_slzr.Deserialize(_pagination, typeof(LazyLoadEvent));
+            List<NoteType> _rows = noteTypeQueryable.LazyOrderBy(loadEvent)
+                                                    .LazyFilters(loadEvent)
+                                                    .LazySkipTake(loadEvent).ToList();
+            //
+            foreach (var _row in _rows)
+                System.Diagnostics.Debug.WriteLine(_row.ToString());
+            Assert.IsTrue(_rows.Count == 3);
+            NoteType _row0 = _rows[0];
+            Assert.IsTrue(_row0.NoteTypeDesc.Substring(0, 2) == "SO");
+            Assert.AreEqual(_row0.NoteTypeSortOrder, 104);
+            Assert.AreEqual(_row0.NoteTypeId, 2);
+        }
+        //
     }
 }
