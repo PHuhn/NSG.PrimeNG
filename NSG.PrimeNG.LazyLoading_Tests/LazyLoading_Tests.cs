@@ -328,17 +328,15 @@ namespace NSG.PrimeNG.LazyLoading_Tests
         [TestMethod(), TestCategory("EF_Native")]
         public void LazyLoading_Lazy_All_01_Test()
         {
-            // sortField: "NoteTypeSortOrder"
-            // string _pagination = "{\"sortOrder\":1,\"sortField\":\"NoteTypeSortOrder\",\"filters\":{\"ServerId\":{\"value\":1,\"matchMode\":\"equals\"},\"Mailed\":{\"value\":false,\"matchMode\":\"equals\"},\"Closed\":{\"value\":false,\"matchMode\":\"equals\"},\"Special\":{\"value\":false,\"matchMode\":\"equals\"}},\"globalFilter\":null}";
-            string _pagination = "{\"first\":0,\"rows\":3,\"sortOrder\":-1,\"sortField\":\"NoteTypeSortOrder\"," +
-                                "\"filters\":{\"NoteTypeDesc\":{\"value\":\"SO\",\"matchMode\":\"StartsWith\"}}}";
-            IQueryable<NoteType> noteTypeQueryable =
-                (from _r in NoteTypes select _r).AsQueryable();
+            string _jsonString = "{\"first\":0,\"rows\":3," +
+                        "\"sortOrder\":-1,\"sortField\":\"NoteTypeSortOrder\"," +
+                        "\"filters\":{\"NoteTypeDesc\":{\"value\":\"SO\",\"matchMode\":\"StartsWith\"}}}";
             JavaScriptSerializer _js_slzr = new JavaScriptSerializer();
-            LazyLoadEvent loadEvent = (LazyLoadEvent)_js_slzr.Deserialize(_pagination, typeof(LazyLoadEvent));
-            List<NoteType> _rows = noteTypeQueryable.LazyOrderBy(loadEvent)
-                                                    .LazyFilters(loadEvent)
-                                                    .LazySkipTake(loadEvent).ToList();
+            LazyLoadEvent _loadEvent = (LazyLoadEvent)_js_slzr.Deserialize(_jsonString, typeof(LazyLoadEvent));
+            List<NoteType> _rows = NoteTypes.AsQueryable()
+                        .LazyOrderBy(_loadEvent)
+                        .LazyFilters(_loadEvent)
+                        .LazySkipTake(_loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());
