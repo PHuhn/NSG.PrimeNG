@@ -29,8 +29,8 @@ The Sandcastle project files for creating HTML compiled help files.
 
 ### Wiki
 The Wiki pages were initialy created by the CS2Wiki.awk scripts with the library's XML file.
-The AWK scripts is a hack and got me 70% of the way to creating the MediaWiki file.
-Make sure the text is flush left except for code.
+The AWK scripts is a hack and got me 70% of the way to creating the MediaWiki file. Make sure the text is flush left except for '''code'''. '''Code''' is indented by two spaces.
+The mediwiki scripts have been moved [here](https://github.com/PHuhn/py-media-wiki).
 
 Check the Wiki pages for more information:
 - [NSG.PrimeNG](https://github.com/PHuhn/NSG.PrimeNG/wiki/Home),
