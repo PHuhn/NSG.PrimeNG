@@ -13,18 +13,33 @@ namespace NSG.PrimeNG.LazyLoading
     /// <summary>
     /// The <see cref="NSG.PrimeNG.LazyLoading"/> namespace contains a class
     /// used by lazy loading feature and filter features.
+    /// 
     /// The lazy loading feature allows one to return a page of data
     /// and combined with the filtering and sorting features gives
-    /// a rich feature of transfering large set of data efficiently.
+    /// a rich feature of transferring large set of data efficiently.
     /// </summary>
+    /// <example>
+    /// A full example as follows:
+    /// <code>
+    /// string _jsonString =
+    ///     "{\"first\":0,\"rows\":3," +
+    ///     "\"sortOrder\":-1,\"sortField\":\"NoteTypeSortOrder\"," +
+    ///     "\"filters\":{\"NoteTypeDesc\":{\"value\":\"SO\",\"matchMode\":\"StartsWith\"}}}";
+    /// JavaScriptSerializer _js_slzr = new JavaScriptSerializer();
+    /// LazyLoadEvent _loadEvent = (LazyLoadEvent)_js_slzr.Deserialize(_jsonString, typeof(LazyLoadEvent));
+    /// List&lt;NoteType&gt; _rows = NoteTypes.AsQueryable()
+    ///     .LazyOrderBy(_loadEvent)
+    ///     .LazyFilters(_loadEvent)
+    ///     .LazySkipTake(_loadEvent).ToList();
+    /// </code>
+    /// </example>
     [System.Runtime.CompilerServices.CompilerGenerated]
     class NamespaceDoc
     {
     }
     //
     /// <summary>
-    /// Set of static helper methods,
-    /// meant to be used as extension methods.
+    /// Set of static helper methods, meant to be used as extension methods.
     /// </summary>
     public static partial class Helpers
     {
@@ -32,8 +47,8 @@ namespace NSG.PrimeNG.LazyLoading
         /// <summary>
         /// Sort this IQueryable, with:
         ///  sortField and
-        ///  sortOrder 1=asc
-        ///           -1=desc
+        ///  sortOrder 1=ascending
+        ///           -1=descending
         /// <example> 
         /// This sample shows how to call this method, where _incidentQuery
         /// is IQueryable of Incident:
@@ -48,9 +63,9 @@ namespace NSG.PrimeNG.LazyLoading
         /// </note>
         /// </summary>
         /// <typeparam name="T">Some class (database)</typeparam>
-        /// <param name="qry">IQueryable query of T</param>
+        /// <param name="qry">IQueryable query of T (above class)</param>
         /// <param name="lle">PrimeNG lazy loading event (LazyLoadEvent) structure</param>
-        /// <returns>IQueryable query of T (with sort applied)</returns>
+        /// <returns>IQueryable query of T (with ascending or descending sort applied)</returns>
         public static IQueryable<T> LazyOrderBy<T>(
                 this IQueryable<T> qry, LazyLoadEvent lle)
         {
@@ -84,7 +99,7 @@ namespace NSG.PrimeNG.LazyLoading
         /// </note>
         /// </summary>
         /// <typeparam name="T">Some class (database)</typeparam>
-        /// <param name="qry">IQueryable query of T</param>
+        /// <param name="qry">IQueryable query of T (above class)</param>
         /// <param name="lle">PrimeNG lazy loading event (LazyLoadEvent) structure</param>
         /// <returns>IQueryable query of T (with skip/take applied)</returns>
         public static IQueryable<T> LazySkipTake<T>(
@@ -113,9 +128,9 @@ namespace NSG.PrimeNG.LazyLoading
         /// </example>
         /// </summary>
         /// <typeparam name="T">Some class (database)</typeparam>
-        /// <param name="qry">IQueryable query of T</param>
+        /// <param name="qry">IQueryable query of T (above class)</param>
         /// <param name="lle">PrimeNG lazy loading event (LazyLoadEvent) structure</param>
-        /// <returns>IQueryable query of T (with filters applied)</returns>
+        /// <returns>IQueryable query of T (with where filters applied)</returns>
         public static IQueryable<T> LazyFilters<T>(
                 this IQueryable<T> qry, LazyLoadEvent lle)
         {
@@ -137,24 +152,43 @@ namespace NSG.PrimeNG.LazyLoading
         //
         // PrimeNG:
         //  "contains", "startsWith", "endsWith", "equals", "notEquals", "in", "lt", "lte", "gt" and "gte".
-        // The following mostly come from:
-        //  https://stackoverflow.com/questions/2497303/how-to-specify-dynamic-field-names-in-a-linq-where-clause
         /// <summary>
         ///  A method to create an expression dynamically given a generic entity,
         ///  and a propertyName, operator and value.
+        ///  <list type="bullet">
+        ///   <listheader><description>Operators</description></listheader>
+        ///   <item><description>contains</description></item>
+        ///   <item><description>startsWith</description></item>
+        ///   <item><description>endsWith</description></item>
+        ///   <item><description>equals</description></item>
+        ///   <item><description>notEquals</description></item>
+        ///   <item><description>lt</description></item>
+        ///   <item><description>lte</description></item>
+        ///   <item><description>gt</description></item>
+        ///   <item><description>gte</description></item>
+        /// </list>
+        ///  <note type="note">
+        ///   The following code mostly come from:
+        ///   https://stackoverflow.com/questions/2497303/how-to-specify-dynamic-field-names-in-a-linq-where-clause
+        ///  </note>
+        ///  <note type="note">
+        ///   The 'in' operator is not handled and will throw an exception:
+        ///   <exception cref="ArgumentOutOfRangeException">Unhandled or invalid operators</exception>
+        ///  </note>
         /// </summary>
         /// <typeparam name="TEntity">
         ///  The class to create the expression for. Most commonly an entity framework
         ///  entity that is used for a DbSet.
         /// </typeparam>
-        /// <param name="propertyName">The string value of the property.</param>
+        /// <param name="propertyName">A string value of the property name.</param>
         /// <param name="op">
-        ///     An string with all the possible operations we want to support.
+        ///  A string representing an operator (see above list of operators).
         /// </param>
         /// <param name="value">A string representation of the value.</param>
         /// <param name="valueType">The underlying type of the value</param>
         /// <returns>
-        ///     An expression that can be used for querying data sets
+        ///  An expression that can be used for querying data sets
+        ///  (Expression&lt;Func&lt;TEntity, bool&gt;&gt;)
         /// </returns>
         private static Expression<Func<TEntity, bool>>
             LazyDynamicFilterExpression<TEntity>(
@@ -215,7 +249,7 @@ namespace NSG.PrimeNG.LazyLoading
         }
         //
         /// <summary>
-        ///  Extract this string value as the passed in object type
+        ///  Extract this string value as the passed in object type (convert/cast).
         /// </summary>
         /// <param name="value">The value, as a string</param>
         /// <param name="type">The desired type</param>

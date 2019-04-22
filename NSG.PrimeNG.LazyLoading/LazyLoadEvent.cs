@@ -10,6 +10,15 @@ namespace NSG.PrimeNG.LazyLoading
     /// PrimeNG structure, used by lazy loading feature.
     /// Class LazyLoadEvent ported from PrimeNG to this library.
     /// Generally, populated by the PrimeNG filter feature.
+    /// <example>
+    /// An example of the JSON:
+    /// {"first":0,"rows":3,"sortOrder":1,
+    ///   "filters":{"ServerId":{"value":1,"matchMode":"eq"},
+    ///     "Mailed":{"value":"false","matchMode":"eq"},
+    ///     "Closed":{"value":"false","matchMode":"eq"},
+    ///     "Special":{"value":"false","matchMode":"eq"}},
+    ///    "globalFilter":null}
+    /// </example>
     /// </summary>
     public class LazyLoadEvent
     {
@@ -17,39 +26,50 @@ namespace NSG.PrimeNG.LazyLoading
         // "filters":{"ServerId":{"value":1,"matchMode":"eq"},"Mailed":{"value":"false","matchMode":"eq"},"Closed":{"value":"false","matchMode":"eq"},"Special":{"value":"false","matchMode":"eq"}},
         // "globalFilter":null}
         /// <summary>
-        /// first record #
+        /// First record #.
         /// </summary>
         public long first;
         /// <summary>
-        /// # of rows to return (page size)
+        /// # of rows to return (page size).
         /// </summary>
         public long rows;
         /// <summary>
-        /// Sort field
+        /// Sort field.
         /// </summary>
         public string sortField;
         /// <summary>
-        /// 1 = asc, -1 = desc
+        /// Ascending or desending sort order.
         /// </summary>
+        /// <value> 1 = asc, -1 = desc</value>
         public int sortOrder;
         /// <summary>
-        /// multiSortMeta, not implemented
+        /// multiSortMeta, not implemented.
         /// </summary>
         public object multiSortMeta;
         /// <summary>
-        /// key of the dictionary is the field name,
-        /// object is value(s) and match mode
+        /// A dictionary of filters.
+        /// Key of the dictionary is the field name, object is value(s)
+        /// and match mode.
         /// </summary>
+        /// <example>
+        /// "filters":{"ServerId":{"value":1,"matchMode":"eq"},
+        ///     "Mailed":{"value":"false","matchMode":"eq"},
+        ///     "Closed":{"value":"false","matchMode":"eq"},
+        ///     "Special":{"value":"false","matchMode":"eq"}},
+        /// </example>
         public Dictionary<string, Object> filters;
         /// <summary>
-        /// globalFilter, not implemented
+        /// globalFilter, not implemented.
         /// </summary>
         public object globalFilter;
         //
         /// <summary>
         /// Returns a string that represents of the current object.
-        /// Overrides of default 'to string'
+        /// This method overrides the default 'to string' method.
         /// </summary>
+        /// <returns>
+        /// A formatted string of the object's values.
+        /// </returns>
         public override string ToString()
         {
             StringBuilder _return = new StringBuilder("record:[");
