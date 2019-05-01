@@ -1,6 +1,6 @@
 # NSG.PrimeNG
 ## Overview
-This solution contains .Net projects as follows:
+This solution contains .Net Standard projects as follows:
 - A collection of support functions for PrimeNG (NSG.Library.PrimeNG)
 
 ## The libraries
@@ -22,7 +22,7 @@ Example from unit tests:
 ```
 
 ### NSG.PrimeNG.LazyLoading_Tests
-NSG.PrimeNG.LazyLoading_Tests is a project of unit tests for the LazyLoading library.
+NSG.PrimeNG.LazyLoading_Tests is a .Net Core project of unit tests for the LazyLoading library.
 
 ### Docs
 The Sandcastle project files for creating HTML compiled help files.
