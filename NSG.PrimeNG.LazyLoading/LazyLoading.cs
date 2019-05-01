@@ -2,11 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Data.Entity;
 using System.Reflection;
 using System.Linq.Expressions;
-using System.Linq.Dynamic;
-using System.ComponentModel;
 //
 namespace NSG.PrimeNG.LazyLoading
 {

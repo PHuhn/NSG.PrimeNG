@@ -57,7 +57,7 @@ namespace NSG.PrimeNG.LazyLoading
         ///     "Closed":{"value":"false","matchMode":"eq"},
         ///     "Special":{"value":"false","matchMode":"eq"}},
         /// </example>
-        public Dictionary<string, Object> filters;
+        public Dictionary<string, Dictionary<string, Object>> filters;
         /// <summary>
         /// globalFilter, not implemented.
         /// </summary>
