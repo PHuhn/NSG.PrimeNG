@@ -2,12 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <AssemblyVersion>1.1.4.17</AssemblyVersion>
-    <FileVersion>1.1.4.17</FileVersion>
+    <AssemblyVersion>1.1.5.17</AssemblyVersion>
+    <FileVersion>1.1.5.17</FileVersion>
     <Company>Northern Software Group</Company>
     <Copyright>Copyright ©  2019</Copyright>
     <Product>Prime-NG library</Product>
-    <Version>1.0.0</Version>
+    <Version>1.1.5</Version>
     <Description>Fluent library to take in JSON data containing 'skip', 'take' sort and filter information and output the query.</Description>
   </PropertyGroup>
 
