@@ -239,7 +239,7 @@ namespace NSG.PrimeNG.LazyLoading
                         Expression.Constant(_stringValue, typeof(string)));
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(op), op, null);
+                    throw new ArgumentOutOfRangeException(nameof(op), $"filter matchMode of: '{op}', not gt/lt/equals/lte/gte/notequals/contains/startswith/endswith");
             }
             //
             return Expression.Lambda<Func<TEntity, bool>>(q, p);

@@ -275,6 +275,31 @@ namespace NSG.PrimeNG.LazyLoading_Tests
         }
         //
         [TestMethod(), TestCategory("EF_Native")]
+        public void LazyLoading_LazyFilter11_BadOperator_Test()
+        {
+            string _pagination = "{\"first\":0,\"rows\":3,\"sortOrder\":-1," +
+                "\"filters\":{\"NoteTypeSortOrder\":{\"value\":\"100\",\"matchMode\":\"eq\"}},\"multiSortMeta\": {},\"globalFilter\": {}}";
+            Console.WriteLine(_pagination);
+            IQueryable<NoteType> noteTypeQueryable =
+                (from _r in NoteTypes select _r).AsQueryable();
+            LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
+            try
+            {
+                List<NoteType> _rows = noteTypeQueryable.LazyFilters(loadEvent).ToList();
+                Assert.Fail();
+            }
+            catch(ArgumentOutOfRangeException _ok)
+            {
+                Console.WriteLine(_ok.Message);
+            }
+            catch (Exception _ex)
+            {
+                Assert.Fail(_ex.Message);
+            }
+            //
+        }
+        //
+        [TestMethod(), TestCategory("EF_Native")]
         public void LazyLoading_LazyOrderBy01_Test()
         {
             // sortField: "NoteTypeSortOrder"
