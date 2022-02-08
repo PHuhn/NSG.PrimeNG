@@ -300,6 +300,22 @@ namespace NSG.PrimeNG.LazyLoading_Tests
         }
         //
         [TestMethod(), TestCategory("EF_Native")]
+        public void LazyLoading_LazyFilter12_LT_LT_Test()
+        {
+            string _pagination = "{\"filters\":{\"NoteTypeId\":{\"value\":5,\"matchMode\":\"lt\"},\"NoteTypeSortOrder\":{\"value\":105,\"matchMode\":\"lt\"}}}";
+            IQueryable<NoteType> noteTypeQueryable =
+                (from _r in NoteTypes select _r).AsQueryable();
+            LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
+            List<NoteType> _rows = noteTypeQueryable.LazyFilters(loadEvent).ToList();
+            //
+            foreach (var _row in _rows)
+                System.Diagnostics.Debug.WriteLine(_row.ToString());
+            Assert.IsTrue(_rows.Count == 3);
+            NoteType _row0 = _rows[0];
+            Assert.AreEqual(_row0.NoteTypeSortOrder, 104);
+        }
+        //
+        [TestMethod(), TestCategory("EF_Native")]
         public void LazyLoading_LazyOrderBy01_Test()
         {
             // sortField: "NoteTypeSortOrder"
@@ -359,6 +375,67 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             Assert.AreEqual(_row0.NoteTypeSortOrder, 104);
             Assert.AreEqual(_row0.NoteTypeId, 2);
         }
+        //
+        #region "LazyLoadEvent2"
+        //
+        [TestMethod(), TestCategory("EF_Native")]
+        public void LazyLoading_LazyFilter2_or_SW_Cont_Test()
+        {
+            string _pagination = "{\"filters\":{\"NoteTypeDesc\":[" +
+                "{\"value\":\"SO\",\"matchMode\":\"startsWith\",\"operator\":\"or\"}," +
+                "{\"value\":\"6\",\"matchMode\":\"contains\",\"operator\":\"or\"}]}}";
+            IQueryable<NoteType> noteTypeQueryable =
+                (from _r in NoteTypes select _r).AsQueryable();
+            LazyLoadEvent2 loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent2>(_pagination);
+            List<NoteType> _rows = noteTypeQueryable.LazyFilters2(loadEvent).ToList();
+            //
+            foreach (var _row in _rows)
+                System.Diagnostics.Debug.WriteLine(_row.ToString());
+            Assert.IsTrue(_rows.Count == 5);
+            NoteType _row0 = _rows[0];
+            Assert.AreEqual(_row0.NoteTypeSortOrder, 104);
+        }
+        //
+        [TestMethod(), TestCategory("EF_Native")]
+        public void LazyLoading_LazyFilter2_and_LT_GT_Test()
+        {
+            string _pagination = "{\"filters\":{\"NoteTypeSortOrder\":[" +
+                    "{\"value\":\"100\",\"matchMode\":\"gt\",\"operator\":\"and\"}," +
+                    "{\"value\":\"200\",\"matchMode\":\"lt\",\"operator\":\"and\"}]}}";
+            IQueryable<NoteType> noteTypeQueryable =
+                (from _r in NoteTypes select _r).AsQueryable();
+            LazyLoadEvent2 loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent2>(_pagination);
+            List<NoteType> _rows = noteTypeQueryable.LazyFilters2(loadEvent).ToList();
+            //
+            foreach (var _row in _rows)
+                System.Diagnostics.Debug.WriteLine(_row.ToString());
+            Assert.AreEqual(_rows.Count, 4);
+            NoteType _row0 = _rows[0];
+            Assert.AreEqual(_row0.NoteTypeSortOrder, 104);
+        }
+        //
+        [TestMethod(), TestCategory("EF_Native")]
+        public void LazyLoading_Lazy_LazyLoadEvent2_All_Test()
+        {
+            string _pagination = "{\"first\":0,\"rows\":3,\"sortField\":\"NoteTypeSortOrder\",\"sortOrder\":1," +
+                "\"filters\":{\"NoteTypeDesc\":[" +
+                "{\"value\":\"SO\",\"matchMode\":\"startsWith\",\"operator\":\"or\"}," +
+                "{\"value\":\"6\",\"matchMode\":\"contains\",\"operator\":\"or\"}]," +
+                "\"NoteTypeShortDesc\":[{\"value\":\"Id\",\"matchMode\":\"startsWith\",\"operator\":\"and\"}]},\"globalFilter\":null}";
+            LazyLoadEvent2 _loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent2>(_pagination);
+            List<NoteType> _rows = NoteTypes.AsQueryable()
+                .LazyOrderBy2(_loadEvent)
+                .LazyFilters2(_loadEvent)
+                .LazySkipTake2(_loadEvent).ToList();
+            //
+            foreach (var _row in _rows)
+                System.Diagnostics.Debug.WriteLine(_row.ToString());
+            Assert.AreEqual(_rows.Count, 3);
+            NoteType _row0 = _rows[0];
+            Assert.AreEqual(_row0.NoteTypeSortOrder, 100);
+        }
+        //
+        #endregion // LazyLoadEvent2
         //
     }
 }

@@ -61,18 +61,28 @@ namespace NSG.PrimeNG.LazyLoading
         /// </summary>
         /// <typeparam name="T">Some class (database)</typeparam>
         /// <param name="qry">IQueryable query of T (above class)</param>
-        /// <param name="lle">PrimeNG lazy loading event (LazyLoadEvent) structure</param>
+        /// <param name="lle">PrimeNG lazy loading event (LazyLoadEvent2) structure</param>
         /// <returns>IQueryable query of T (with ascending or descending sort applied)</returns>
+        public static IQueryable<T> LazyOrderBy2<T>(
+                this IQueryable<T> qry, LazyLoadEvent2 lle)
+        {
+            return qry.OrderBy<T>(lle.sortField, lle.sortOrder);
+        }
         public static IQueryable<T> LazyOrderBy<T>(
                 this IQueryable<T> qry, LazyLoadEvent lle)
         {
+            return qry.OrderBy<T>(lle.sortField, lle.sortOrder);
+        }
+        private static IQueryable<T> OrderBy<T>(
+                this IQueryable<T> qry, string sortField, int sortOrder)
+        {
             ParameterExpression _parm = Expression.Parameter(typeof(T));
-            MemberExpression memberAccess = Expression.PropertyOrField(_parm, lle.sortField);
+            MemberExpression memberAccess = Expression.PropertyOrField(_parm, sortField);
             LambdaExpression keySelector = Expression.Lambda(memberAccess, _parm);
             //
             MethodCallExpression orderBy = Expression.Call(
                 typeof(Queryable),
-                (lle.sortOrder == 1 ? "OrderBy" : "OrderByDescending" ),
+                (sortOrder == 1 ? "OrderBy" : "OrderByDescending"),
                 new Type[] { typeof(T), memberAccess.Type },
                 qry.Expression,
                 Expression.Quote(keySelector));
@@ -99,12 +109,19 @@ namespace NSG.PrimeNG.LazyLoading
         /// <param name="qry">IQueryable query of T (above class)</param>
         /// <param name="lle">PrimeNG lazy loading event (LazyLoadEvent) structure</param>
         /// <returns>IQueryable query of T (with skip/take applied)</returns>
-        public static IQueryable<T> LazySkipTake<T>(
-                this IQueryable<T> qry, LazyLoadEvent lle)
+        public static IQueryable<T> LazySkipTake2<T>(this IQueryable<T> qry, LazyLoadEvent2 lle)
         {
-            if (lle.rows > 0)
+            return qry.SkipTake<T>((int)lle.first, (int)lle.rows);
+        }
+        public static IQueryable<T> LazySkipTake<T>( this IQueryable<T> qry, LazyLoadEvent lle)
+        {
+            return qry.SkipTake<T>((int)lle.first, (int)lle.rows);
+        }
+        private static IQueryable<T> SkipTake<T>(this IQueryable<T> qry, int first, int rows)
+        {
+            if (rows > 0)
             {
-                qry = qry.Skip((int)lle.first).Take((int)lle.rows);
+                qry = qry.Skip((int)first).Take(rows);
             }
             return qry;
         }
@@ -137,14 +154,78 @@ namespace NSG.PrimeNG.LazyLoading
                 {
                     PropertyInfo _propertyInfo = typeof(T).GetProperty(_o.Key);
                     Type _type = _propertyInfo.PropertyType;
-                    Dictionary<string, Object> _value =
-                            ((Dictionary<string, Object>)_o.Value);
+                    FilterMetadata _value = _o.Value;
                     var whereClause = LazyDynamicFilterExpression<T>(_o.Key,
-                            (string)_value["matchMode"], _value["value"].ToString(), _type);
+                            (string)_value.matchMode, _value.value.ToString(), _type, "");
                     qry = qry.Where(whereClause);
                 }
             }
             return qry;
+        }
+        public static IQueryable<T> LazyFilters2<T>(
+                this IQueryable<T> qry, LazyLoadEvent2 lle)
+        {
+            if (lle.filters != null)
+            {
+                foreach (var _f in lle.filters)
+                {
+                    PropertyInfo _propertyInfo = typeof(T).GetProperty(_f.Key);
+                    Type _type = _propertyInfo.PropertyType;
+                    FilterMetadata[] _values = _f.Value.Where(f => f.value != null).ToArray();
+                    var count = 1;
+                    Expression<Func<T, bool>>whereClause = null;
+                    foreach (FilterMetadata _m in _values)
+                    {
+                        var whereTemp = LazyDynamicFilterExpression<T>(_f.Key,
+                                (string)_m.matchMode, _m.value.ToString(), _type, _m.@operator);
+                        if( count == 1 )
+                        {
+                            whereClause = whereTemp;
+                        } else
+                        {
+                            if (_m.@operator.ToLower( ) == "or")
+                            {
+                                whereClause = whereClause.OrExpression(whereTemp);
+                            } else
+                            {
+                                whereClause = whereClause.AndExpression(whereTemp);
+                            }
+                        }
+                        count++;
+                    }
+                    qry = qry.Where(whereClause);
+                }
+            }
+            return qry;
+        }
+        /// <summary>
+        /// Implement an Or conditional
+        /// </summary>
+        /// <typeparam name="T">Some class (database)</typeparam>
+        /// <param name="left">The left (this) expression</param>
+        /// <param name="right">The right expression</param>
+        /// <returns>An expression that can be used for querying data sets</returns>
+        public static Expression<Func<T, bool>> OrExpression<T>(this Expression<Func<T, bool>> left,
+                                                            Expression<Func<T, bool>> right)
+        {
+            var invokedExpr = Expression.Invoke(right, left.Parameters.Cast<Expression>());
+            return Expression.Lambda<Func<T, bool>>
+                  (Expression.OrElse(left.Body, invokedExpr), left.Parameters);
+        }
+        //
+        /// <summary>
+        /// Implement an And conditional
+        /// </summary>
+        /// <typeparam name="T">Some class (database)</typeparam>
+        /// <param name="left">The left (this) expression</param>
+        /// <param name="right">The right expression</param>
+        /// <returns>An expression that can be used for querying data sets</returns>
+        public static Expression<Func<T, bool>> AndExpression<T>(this Expression<Func<T, bool>> left,
+                                                                      Expression<Func<T, bool>> right)
+        {
+            var invokedExpr = Expression.Invoke(right, left.Parameters.Cast<Expression>());
+            return Expression.Lambda<Func<T, bool>>
+                  (Expression.AndAlso(left.Body, invokedExpr), left.Parameters);
         }
         //
         // PrimeNG:
@@ -178,22 +259,23 @@ namespace NSG.PrimeNG.LazyLoading
         ///  entity that is used for a DbSet.
         /// </typeparam>
         /// <param name="propertyName">A string value of the property name.</param>
-        /// <param name="op">
+        /// <param name="match">
         ///  A string representing an operator (see above list of operators).
         /// </param>
         /// <param name="value">A string representation of the value.</param>
         /// <param name="valueType">The underlying type of the value</param>
+        /// <param name="op">operator and/or</param>
         /// <returns>
         ///  An expression that can be used for querying data sets
         ///  (Expression&lt;Func&lt;TEntity, bool&gt;&gt;)
         /// </returns>
         private static Expression<Func<TEntity, bool>>
             LazyDynamicFilterExpression<TEntity>(
-                string propertyName, string op, string value, Type valueType)
+                string propertyName, string match, string value, Type valueType, string op)
         {
             Type type = typeof(TEntity);
             object asType = AsType(value, valueType);
-            ParameterExpression p = Expression.Parameter(type, "x");
+            ParameterExpression p = Expression.Parameter(type, type.Name);
             MemberExpression member = Expression.Property(p, propertyName);
             string _stringValue = asType.ToString();
             ConstantExpression valueExpression = Expression.Constant(asType);
@@ -201,7 +283,7 @@ namespace NSG.PrimeNG.LazyLoading
             MethodInfo method;
             Expression q;
             //
-            switch (op.ToLower())
+            switch (match.ToLower())
             {
                 case "gt":
                     q = Expression.GreaterThan(member, valueExpression);
@@ -239,7 +321,7 @@ namespace NSG.PrimeNG.LazyLoading
                         Expression.Constant(_stringValue, typeof(string)));
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(op), $"filter matchMode of: '{op}', not gt/lt/equals/lte/gte/notequals/contains/startswith/endswith");
+                    throw new ArgumentOutOfRangeException(nameof(match), $"filter matchMode of: '{match}', not gt/lt/equals/lte/gte/notequals/contains/startswith/endswith");
             }
             //
             return Expression.Lambda<Func<TEntity, bool>>(q, p);
