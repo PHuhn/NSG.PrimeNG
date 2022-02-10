@@ -1,8 +1,10 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 //
 using NSG.PrimeNG.LazyLoading;
@@ -84,7 +86,7 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             IQueryable<NoteType> noteTypeQueryable =
                 (from _r in NoteTypes select _r).AsQueryable();
             LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
-            List<NoteType> _rows = noteTypeQueryable.LazySkipTake(loadEvent).ToList();
+            List<NoteType> _rows = noteTypeQueryable.LazySkipTake<NoteType>(loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());
@@ -100,7 +102,7 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             IQueryable<NoteType> noteTypeQueryable =
                 (from _r in NoteTypes select _r).AsQueryable();
             LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
-            List<NoteType> _rows = noteTypeQueryable.LazySkipTake(loadEvent).ToList();
+            List<NoteType> _rows = noteTypeQueryable.LazySkipTake<NoteType>(loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());
@@ -119,7 +121,7 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             Console.WriteLine(_pagination);
             LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
             Console.WriteLine(loadEvent);
-            List<NoteType> _rows = noteTypeQueryable.LazyFilters(loadEvent).ToList();
+            List<NoteType> _rows = noteTypeQueryable.LazyFilters<NoteType>(loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());
@@ -136,7 +138,7 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             IQueryable<NoteType> noteTypeQueryable =
                 (from _r in NoteTypes select _r).AsQueryable();
             LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
-            List<NoteType> _rows = noteTypeQueryable.LazyFilters(loadEvent).ToList();
+            List<NoteType> _rows = noteTypeQueryable.LazyFilters<NoteType>(loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());
@@ -152,7 +154,7 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             IQueryable<NoteType> noteTypeQueryable =
                 (from _r in NoteTypes select _r).AsQueryable();
             LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
-            List<NoteType> _rows = noteTypeQueryable.LazyFilters(loadEvent).ToList();
+            List<NoteType> _rows = noteTypeQueryable.LazyFilters<NoteType>(loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());
@@ -168,7 +170,7 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             IQueryable<NoteType> noteTypeQueryable =
                 (from _r in NoteTypes select _r).AsQueryable();
             LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
-            List<NoteType> _rows = noteTypeQueryable.LazyFilters(loadEvent).ToList();
+            List<NoteType> _rows = noteTypeQueryable.LazyFilters<NoteType>(loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());
@@ -185,7 +187,7 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             IQueryable<NoteType> noteTypeQueryable =
                 (from _r in NoteTypes select _r).AsQueryable();
             LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
-            List<NoteType> _rows = noteTypeQueryable.LazyFilters(loadEvent).ToList();
+            List<NoteType> _rows = noteTypeQueryable.LazyFilters<NoteType>(loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());
@@ -201,7 +203,7 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             IQueryable<NoteType> noteTypeQueryable =
                 (from _r in NoteTypes select _r).AsQueryable();
             LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
-            List<NoteType> _rows = noteTypeQueryable.LazyFilters(loadEvent).ToList();
+            List<NoteType> _rows = noteTypeQueryable.LazyFilters<NoteType>(loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());
@@ -217,7 +219,7 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             IQueryable<NoteType> noteTypeQueryable =
                 (from _r in NoteTypes select _r).AsQueryable();
             LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
-            List<NoteType> _rows = noteTypeQueryable.LazyFilters(loadEvent).ToList();
+            List<NoteType> _rows = noteTypeQueryable.LazyFilters<NoteType>(loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());
@@ -233,7 +235,7 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             IQueryable<NoteType> noteTypeQueryable =
                 (from _r in NoteTypes select _r).AsQueryable();
             LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
-            List<NoteType> _rows = noteTypeQueryable.LazyFilters(loadEvent).ToList();
+            List<NoteType> _rows = noteTypeQueryable.LazyFilters<NoteType>(loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());
@@ -249,7 +251,7 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             IQueryable<NoteType> noteTypeQueryable =
                 (from _r in NoteTypes select _r).AsQueryable();
             LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
-            List<NoteType> _rows = noteTypeQueryable.LazyFilters(loadEvent).ToList();
+            List<NoteType> _rows = noteTypeQueryable.LazyFilters<NoteType>(loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());
@@ -265,7 +267,7 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             IQueryable<NoteType> noteTypeQueryable =
                 (from _r in NoteTypes select _r).AsQueryable();
             LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
-            List<NoteType> _rows = noteTypeQueryable.LazyFilters(loadEvent).ToList();
+            List<NoteType> _rows = noteTypeQueryable.LazyFilters<NoteType>(loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());
@@ -285,7 +287,7 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
             try
             {
-                List<NoteType> _rows = noteTypeQueryable.LazyFilters(loadEvent).ToList();
+                List<NoteType> _rows = noteTypeQueryable.LazyFilters<NoteType>(loadEvent).ToList();
                 Assert.Fail();
             }
             catch(ArgumentOutOfRangeException _ok)
@@ -306,7 +308,7 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             IQueryable<NoteType> noteTypeQueryable =
                 (from _r in NoteTypes select _r).AsQueryable();
             LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
-            List<NoteType> _rows = noteTypeQueryable.LazyFilters(loadEvent).ToList();
+            List<NoteType> _rows = noteTypeQueryable.LazyFilters<NoteType>(loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());
@@ -324,7 +326,7 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             IQueryable<NoteType> noteTypeQueryable =
                 (from _r in NoteTypes select _r).AsQueryable();
             LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
-            List<NoteType> _rows = noteTypeQueryable.LazyOrderBy(loadEvent).ToList();
+            List<NoteType> _rows = noteTypeQueryable.LazyOrderBy<NoteType>(loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());
@@ -344,7 +346,7 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             IQueryable<NoteType> noteTypeQueryable =
                 (from _r in NoteTypes select _r).AsQueryable();
             LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
-            List<NoteType> _rows = noteTypeQueryable.LazyOrderBy(loadEvent).ToList();
+            List<NoteType> _rows = noteTypeQueryable.LazyOrderBy<NoteType>(loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());
@@ -363,9 +365,9 @@ namespace NSG.PrimeNG.LazyLoading_Tests
                         "\"filters\":{\"NoteTypeDesc\":{\"value\":\"SO\",\"matchMode\":\"StartsWith\"}}}";
             LazyLoadEvent _loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_jsonString);
             List<NoteType> _rows = NoteTypes.AsQueryable()
-                        .LazyOrderBy(_loadEvent)
-                        .LazyFilters(_loadEvent)
-                        .LazySkipTake(_loadEvent).ToList();
+                        .LazyOrderBy<NoteType>(_loadEvent)
+                        .LazyFilters<NoteType>(_loadEvent)
+                        .LazySkipTake<NoteType>(_loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());
@@ -424,9 +426,9 @@ namespace NSG.PrimeNG.LazyLoading_Tests
                 "\"NoteTypeShortDesc\":[{\"value\":\"Id\",\"matchMode\":\"startsWith\",\"operator\":\"and\"}]},\"globalFilter\":null}";
             LazyLoadEvent2 _loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent2>(_pagination);
             List<NoteType> _rows = NoteTypes.AsQueryable()
-                .LazyOrderBy2(_loadEvent)
-                .LazyFilters2(_loadEvent)
-                .LazySkipTake2(_loadEvent).ToList();
+                .LazyOrderBy2<NoteType>(_loadEvent)
+                .LazyFilters2<NoteType>(_loadEvent)
+                .LazySkipTake2<NoteType>(_loadEvent).ToList();
             //
             foreach (var _row in _rows)
                 System.Diagnostics.Debug.WriteLine(_row.ToString());

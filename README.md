@@ -21,18 +21,20 @@ Example from original LazyLoadEvent unit tests:
             .LazySkipTake(_loadEvent).ToList();
 ```
 
+The PrimeNG definition of LazyLoadEvent is wrong.  What is returned from the lazy interface event for the filter is not a single FilterMetadata, but an array of FilterMetadata.  It allows for 'or' conditional on the element being filtered.  See [github issue 10055](https://github.com/primefaces/primeng/issues/10055) or my issue 10269.
+
 Example of corrected LazyLoadEvent2 interface test:
 ```
-    string _pagination = "{\"first\":0,\"rows\":3," +
+    string _jsonString = "{\"first\":0,\"rows\":3," +
         "\"sortOrder\":-1,\"sortField\":\"NoteTypeSortOrder\"," +
         "{\"filters\":{\"NoteTypeDesc\":[" +
         "{\"value\":\"SO\",\"matchMode\":\"startsWith\",\"operator\":\"or\"}," +
         "{\"value\":\"6\",\"matchMode\":\"contains\",\"operator\":\"or\"}]}}";
-    LazyLoadEvent2 _loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent2>(_pagination);
+    LazyLoadEvent2 _loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent2>(_jsonString);
     List<NoteType> _rows = NoteTypes.AsQueryable()
-        .LazyOrderBy2(_loadEvent)
-        .LazyFilters2(_loadEvent)
-        .LazySkipTake2(_loadEvent).ToList();
+        .LazyOrderBy2<NoteType>(_loadEvent)
+        .LazyFilters2<NoteType>(_loadEvent)
+        .LazySkipTake2<NoteType>(_loadEvent).ToList();
 ```
 
 ### NSG.PrimeNG.LazyLoading_Tests

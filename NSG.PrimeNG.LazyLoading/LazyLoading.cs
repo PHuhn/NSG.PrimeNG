@@ -25,9 +25,24 @@ namespace NSG.PrimeNG.LazyLoading
     /// JavaScriptSerializer _js_slzr = new JavaScriptSerializer();
     /// LazyLoadEvent _loadEvent = (LazyLoadEvent)_js_slzr.Deserialize(_jsonString, typeof(LazyLoadEvent));
     /// List&lt;NoteType&gt; _rows = NoteTypes.AsQueryable()
-    ///     .LazyOrderBy(_loadEvent)
-    ///     .LazyFilters(_loadEvent)
-    ///     .LazySkipTake(_loadEvent).ToList();
+    ///     .LazyOrderBy&lt;NoteType&gt;(_loadEvent)
+    ///     .LazyFilters&lt;NoteType&gt;(_loadEvent)
+    ///     .LazySkipTake&lt;NoteType&gt;(_loadEvent).ToList();
+    /// </code>
+    /// </example>
+    /// <example>
+    /// A full example of the of corrected LazyLoadEvent2 as follows:
+    /// <code>
+    /// string _pagination = "{\"first\":0,\"rows\":3," +
+    ///     "\"sortOrder\":-1,\"sortField\":\"NoteTypeSortOrder\"," +
+    ///     "{\"filters\":{\"NoteTypeDesc\":[" +
+    ///     "{\"value\":\"SO\",\"matchMode\":\"startsWith\",\"operator\":\"or\"}," +
+    ///     "{\"value\":\"6\",\"matchMode\":\"contains\",\"operator\":\"or\"}]}}";
+    /// LazyLoadEvent2 _loadEvent = JsonConvert.DeserializeObject&lt;LazyLoadEvent2&gt;(_pagination);
+    /// List&lt;NoteType&gt; _rows = NoteTypes.AsQueryable()
+    ///     .LazyOrderBy2&lt;NoteType&gt;(_loadEvent)
+    ///     .LazyFilters2&lt;NoteType&gt;(_loadEvent)
+    ///     .LazySkipTake2&lt;NoteType&gt;(_loadEvent).ToList();
     /// </code>
     /// </example>
     [System.Runtime.CompilerServices.CompilerGenerated]
