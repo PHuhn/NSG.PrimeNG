@@ -40,6 +40,18 @@ namespace NSG.PrimeNG.LazyLoading_Tests
         }
         //
         [TestMethod]
+        public void LazyLoadEvent_ToString_Test()
+        {
+            // given
+            LazyLoadEvent loadEvent = new LazyLoadEvent();
+            // when
+            string eventString = loadEvent.ToString();
+            // then
+            Assert.AreEqual(eventString, "LazyLoadEvent:[first: 0, rows: 0, sortField: /null/, sortOrder: 0, multiSortMeta: /null/, filters: /null/, globalFilter: /null/]");
+            //
+        }
+        //
+        [TestMethod]
         public void LazyLoadEvent2_JsonString_Test()
         {
             // given
@@ -55,6 +67,18 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             string eventString = loadEvent.ToString();
             // then
             Assert.AreEqual(eventString, "LazyLoadEvent2:[first: 0, rows: 5, sortField: NoteTypeId, sortOrder: -1, multiSortMeta: /null/, filters: NoteTypeDesc-startsWith:F:and, NoteTypeDesc-contains:1:and, NoteTypeShortDesc-startsWith:S:and, globalFilter: /null/]");
+            //
+        }
+        //
+        [TestMethod]
+        public void LazyLoadEvent2_ToString_Test()
+        {
+            // given
+            LazyLoadEvent2 loadEvent = new LazyLoadEvent2();
+            // when
+            string eventString = loadEvent.ToString();
+            // then
+            Assert.AreEqual(eventString, "LazyLoadEvent2:[first: 0, rows: 0, sortField: /null/, sortOrder: 0, multiSortMeta: /null/, filters: /null/, globalFilter: /null/]");
             //
         }
         //

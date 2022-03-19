@@ -73,15 +73,23 @@ namespace NSG.PrimeNG.LazyLoading
         /// </returns>
         public override string ToString()
         {
+            string _null = "/null/";
             StringBuilder _return = new StringBuilder("LazyLoadEvent:[");
             _return.AppendFormat("first: {0}, rows: {1}, ", first, rows);
-            _return.AppendFormat("sortField: {0}, sortOrder: {1}, ", sortField, sortOrder);
-            _return.AppendFormat("multiSortMeta: {0}, ", multiSortMeta != null ? multiSortMeta.ToString() : "/null/");
+            _return.AppendFormat("sortField: {0}, sortOrder: {1}, ", sortField != null ? sortField : _null, sortOrder);
+            _return.AppendFormat("multiSortMeta: {0}, ", multiSortMeta != null ? multiSortMeta.ToString() : _null);
             _return.AppendFormat("filters: ");
-            foreach (KeyValuePair<string, FilterMetadata> metadata in filters)
+            if (filters != null)
             {
-                _return.AppendFormat("{0}-{1}:{2}:{3}, ", metadata.Key, 
-                    metadata.Value.matchMode, metadata.Value.value, metadata.Value.@operator != null ? metadata.Value.@operator : "/null/");
+                foreach (KeyValuePair<string, FilterMetadata> metadata in filters)
+                {
+                    _return.AppendFormat("{0}-{1}:{2}:{3}, ", metadata.Key, 
+                        metadata.Value.matchMode, metadata.Value.value, metadata.Value.@operator != null ? metadata.Value.@operator : "/null/");
+                }
+            }
+            else
+            {
+                _return.AppendFormat("{0}, ", _null);
             }
             _return.AppendFormat("globalFilter: {0}]", globalFilter != null ? globalFilter.ToString() : "/null/");
             return _return.ToString();

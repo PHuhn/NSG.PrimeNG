@@ -77,20 +77,28 @@ namespace NSG.PrimeNG.LazyLoading
         /// </returns>
         public override string ToString()
         {
+            string _null = "/null/";
             StringBuilder _return = new StringBuilder("LazyLoadEvent2:[");
             _return.AppendFormat("first: {0}, rows: {1}, ", first, rows);
-            _return.AppendFormat("sortField: {0}, sortOrder: {1}, ", sortField, sortOrder);
-            _return.AppendFormat("multiSortMeta: {0}, ", multiSortMeta != null ? multiSortMeta.ToString() : "/null/");
+            _return.AppendFormat("sortField: {0}, sortOrder: {1}, ", sortField != null ? sortField : _null, sortOrder);
+            _return.AppendFormat("multiSortMeta: {0}, ", multiSortMeta != null ? multiSortMeta.ToString() : _null);
             _return.AppendFormat("filters: ");
-            foreach (KeyValuePair<string, FilterMetadata[]> metakey in filters)
+            if(filters != null)
             {
-                foreach (FilterMetadata metadata in metakey.Value)
+                foreach (KeyValuePair<string, FilterMetadata[]> metakey in filters)
                 {
-                    _return.AppendFormat("{0}-{1}:{2}:{3}, ", metakey.Key,
-                        metadata.matchMode, (metadata.value != null ? metadata.value : "/null/"), metadata.@operator != null ? metadata.@operator : "/null/");
+                    foreach (FilterMetadata metadata in metakey.Value)
+                    {
+                        _return.AppendFormat("{0}-{1}:{2}:{3}, ", metakey.Key,
+                            metadata.matchMode, (metadata.value != null ? metadata.value : _null), metadata.@operator != null ? metadata.@operator : _null);
+                    }
                 }
             }
-            _return.AppendFormat("globalFilter: {0}]", globalFilter != null ? globalFilter.ToString() : "/null/");
+            else
+            {
+                _return.AppendFormat("{0}, ", _null);
+            }
+            _return.AppendFormat("globalFilter: {0}]", globalFilter != null ? globalFilter.ToString() : _null);
             return _return.ToString();
         }
     }

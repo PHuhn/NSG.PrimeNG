@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <AssemblyVersion>2.0.0.22</AssemblyVersion>
-    <FileVersion>2.0.0.22</FileVersion>
+    <AssemblyVersion>2.0.0.23</AssemblyVersion>
+    <FileVersion>2.0.0.23</FileVersion>
     <Company>Northern Software Group</Company>
     <Copyright>Copyright ©  2022</Copyright>
     <Product>Prime-NG library</Product>
