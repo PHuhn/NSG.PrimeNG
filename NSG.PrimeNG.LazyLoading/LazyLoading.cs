@@ -170,9 +170,15 @@ namespace NSG.PrimeNG.LazyLoading
                     PropertyInfo _propertyInfo = typeof(T).GetProperty(_o.Key);
                     Type _type = _propertyInfo.PropertyType;
                     FilterMetadata _value = _o.Value;
-                    var whereClause = LazyDynamicFilterExpression<T>(_o.Key,
-                            (string)_value.matchMode, _value.value.ToString(), _type, "");
-                    qry = qry.Where(whereClause);
+                    if(_value != null)
+                    {
+                        if(_value.value != null )
+                        {
+                            var whereClause = LazyDynamicFilterExpression<T>(_o.Key,
+                                    (string)_value.matchMode, _value.value.ToString(), _type, "");
+                            qry = qry.Where(whereClause);
+                        }
+                    }
                 }
             }
             return qry;
@@ -187,28 +193,33 @@ namespace NSG.PrimeNG.LazyLoading
                     PropertyInfo _propertyInfo = typeof(T).GetProperty(_f.Key);
                     Type _type = _propertyInfo.PropertyType;
                     FilterMetadata[] _values = _f.Value.Where(f => f.value != null).ToArray();
-                    var count = 1;
-                    Expression<Func<T, bool>>whereClause = null;
-                    foreach (FilterMetadata _m in _values)
+                    if( _values != null && _values.Length != 0)
                     {
-                        var whereTemp = LazyDynamicFilterExpression<T>(_f.Key,
-                                (string)_m.matchMode, _m.value.ToString(), _type, _m.@operator);
-                        if( count == 1 )
+                        var count = 1;
+                        Expression<Func<T, bool>> whereClause = null;
+                        foreach (FilterMetadata _m in _values)
                         {
-                            whereClause = whereTemp;
-                        } else
-                        {
-                            if (_m.@operator.ToLower( ) == "or")
+                            var whereTemp = LazyDynamicFilterExpression<T>(_f.Key,
+                                    (string)_m.matchMode, _m.value.ToString(), _type, _m.@operator);
+                            if (count == 1)
                             {
-                                whereClause = whereClause.OrExpression(whereTemp);
-                            } else
-                            {
-                                whereClause = whereClause.AndExpression(whereTemp);
+                                whereClause = whereTemp;
                             }
+                            else
+                            {
+                                if (_m.@operator.ToLower() == "or")
+                                {
+                                    whereClause = whereClause.OrExpression(whereTemp);
+                                }
+                                else
+                                {
+                                    whereClause = whereClause.AndExpression(whereTemp);
+                                }
+                            }
+                            count++;
                         }
-                        count++;
+                        qry = qry.Where(whereClause);
                     }
-                    qry = qry.Where(whereClause);
                 }
             }
             return qry;

@@ -381,6 +381,26 @@ namespace NSG.PrimeNG.LazyLoading_Tests
         #region "LazyLoadEvent2"
         //
         [TestMethod(), TestCategory("EF_Native")]
+        public void LazyLoading_LazyFilter2_null_matchMode_value_Test()
+        {
+            string _pagination =
+                "{\"filters\":{\"NoteTypeDesc\":[" +
+                "{\"matchMode\":\"contains\"}]}}";
+                // "{\"value\":\"6\",\"matchMode\":\"contains\"}]}}";
+            IQueryable<NoteType> noteTypeQueryable =
+                (from _r in NoteTypes select _r).AsQueryable();
+            LazyLoadEvent2 loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent2>(_pagination);
+            List<NoteType> _rows = noteTypeQueryable.LazyFilters2(loadEvent).ToList();
+            //
+            foreach (var _row in _rows)
+                System.Diagnostics.Debug.WriteLine(_row.ToString());
+            Assert.IsTrue(_rows.Count == 7);
+            NoteType _row0 = _rows[0];
+            // new NoteType() { NoteTypeId = 1, NoteTypeSortOrder = 200, NoteTypeShortDesc = "Id:1", NoteTypeDesc = "Id:1"},
+            Assert.AreEqual(_row0.NoteTypeSortOrder, 200);
+        }
+        //
+        [TestMethod(), TestCategory("EF_Native")]
         public void LazyLoading_LazyFilter2_or_SW_Cont_Test()
         {
             string _pagination = "{\"filters\":{\"NoteTypeDesc\":[" +
