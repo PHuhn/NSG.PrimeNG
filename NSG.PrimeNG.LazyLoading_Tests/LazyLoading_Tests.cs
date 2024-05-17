@@ -318,6 +318,20 @@ namespace NSG.PrimeNG.LazyLoading_Tests
         }
         //
         [TestMethod(), TestCategory("EF_Native")]
+        public void LazyLoading_LazyFilter13_No_Match_Test()
+        {
+            string _pagination = "{\"filters\":{\"NoteTypeId\":{\"value\":99,\"matchMode\":\"gt\"},\"NoteTypeSortOrder\":{\"value\":105,\"matchMode\":\"lt\"}}}";
+            IQueryable<NoteType> noteTypeQueryable =
+                (from _r in NoteTypes select _r).AsQueryable();
+            LazyLoadEvent loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent>(_pagination);
+            List<NoteType> _rows = noteTypeQueryable.LazyFilters<NoteType>(loadEvent).ToList();
+            //
+            Assert.AreNotEqual(_rows, null);
+            Assert.IsTrue(_rows.Count == 0);
+            Console.WriteLine(_rows);
+        }
+        //
+        [TestMethod(), TestCategory("EF_Native")]
         public void LazyLoading_LazyOrderBy01_Test()
         {
             // sortField: "NoteTypeSortOrder"
@@ -437,6 +451,20 @@ namespace NSG.PrimeNG.LazyLoading_Tests
         }
         //
         [TestMethod(), TestCategory("EF_Native")]
+        public void LazyLoading_LazyFilter2_No_Match_Test()
+        {
+            string _pagination = "{\"filters\":{\"NoteTypeId\":[" +
+                    "{\"value\":\"99\",\"matchMode\":\"gt\"}]}}";
+            IQueryable<NoteType> noteTypeQueryable =
+                (from _r in NoteTypes select _r).AsQueryable();
+            LazyLoadEvent2 loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent2>(_pagination);
+            List<NoteType> _rows = noteTypeQueryable.LazyFilters2<NoteType>(loadEvent).ToList();
+            //
+            Assert.AreNotEqual(_rows, null);
+            Assert.IsTrue(_rows.Count == 0);
+        }
+        //
+        [TestMethod(), TestCategory("EF_Native")]
         public void LazyLoading_Lazy_LazyLoadEvent2_All_Test()
         {
             string _pagination = "{\"first\":0,\"rows\":3,\"sortField\":\"NoteTypeSortOrder\",\"sortOrder\":1," +
@@ -455,6 +483,22 @@ namespace NSG.PrimeNG.LazyLoading_Tests
             Assert.AreEqual(_rows.Count, 3);
             NoteType _row0 = _rows[0];
             Assert.AreEqual(_row0.NoteTypeSortOrder, 100);
+        }
+        //
+        [TestMethod(), TestCategory("EF_Native")]
+        public void LazyLoading_Lazy_LazyLoadEvent2_No_Match_Test()
+        {
+            string _pagination = "{\"first\":0,\"rows\":3,\"sortField\":\"NoteTypeSortOrder\",\"sortOrder\":1," +
+                "\"filters\":{\"NoteTypeId\":[" +
+                    "{\"value\":\"99\",\"matchMode\":\"gt\"}]},\"globalFilter\":null}";
+            LazyLoadEvent2 _loadEvent = JsonConvert.DeserializeObject<LazyLoadEvent2>(_pagination);
+            List<NoteType> _rows = NoteTypes.AsQueryable()
+                .LazyOrderBy2<NoteType>(_loadEvent)
+                .LazyFilters2<NoteType>(_loadEvent)
+                .LazySkipTake2<NoteType>(_loadEvent).ToList();
+            //
+            Assert.AreNotEqual(_rows, null);
+            Assert.IsTrue(_rows.Count == 0);
         }
         //
         #endregion // LazyLoadEvent2
